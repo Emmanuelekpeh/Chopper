@@ -1,6 +1,4 @@
 # Python dependency constraints
-# greenlet==2.0.2; python_version < "3.12"
-SQLAlchemy==2.0.23
 streamlit>=1.33.0
 numpy>=1.26.0
 # tensorflow>=2.16.0
