@@ -189,10 +189,12 @@ def main():
     elif args.command == 'train':
         # Load processed dataset paths from metadata
         try:
-            import numpy as np
-            metadata = np.load('data/processed/dataset_metadata.npy', allow_pickle=True).item()
+            import json
+            with open('data/processed/dataset_metadata.json', 'r') as f:
+                metadata = json.load(f)
             train_model(metadata['segment_paths'], args.epochs)
-        except (FileNotFoundError, KeyError):
+        except (FileNotFoundError, KeyError) as e:
+            print(f"Error loading dataset metadata: {e}")
             print("No processed dataset found. Run 'process' command first.")
     
     elif args.command == 'generate':

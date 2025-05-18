@@ -28,7 +28,7 @@ class ArchiveScraper:
             'rows': rows,
             'output': 'json'
         }
-        resp = requests.get(self.SEARCH_URL, params=params)
+        resp = requests.get(self.SEARCH_URL, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
         return data.get('response', {}).get('docs', [])
@@ -46,7 +46,7 @@ class ArchiveScraper:
         """
         # Fetch metadata to list available files
         meta_url = f"{self.METADATA_URL}/{identifier}/files"
-        resp = requests.get(meta_url)
+        resp = requests.get(meta_url, timeout=30)
         resp.raise_for_status()
         files = resp.json().get('result', [])
 
@@ -55,7 +55,7 @@ class ArchiveScraper:
             name = file_info.get('name', '')
             if name.lower().endswith(('.mp3', '.wav', '.ogg')):
                 url = f"{self.DOWNLOAD_BASE}/{identifier}/{name}"
-                response = requests.get(url, stream=True)
+                response = requests.get(url, stream=True, timeout=60)
                 response.raise_for_status()
                 os.makedirs(dest_dir, exist_ok=True)
                 file_path = os.path.join(dest_dir, name)

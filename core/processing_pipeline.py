@@ -4,6 +4,7 @@ import librosa
 import soundfile as sf
 from typing import List, Dict, Tuple
 import concurrent.futures
+import json
 
 class ProcessingPipeline:
     """
@@ -200,7 +201,8 @@ class ProcessingPipeline:
             "failed_files": [r["original"] for r in failed]
         }
         
-        # Save metadata
-        np.save(f"{self.output_dir}/dataset_metadata.npy", metadata)
+        # Save metadata as JSON
+        with open(f"{self.output_dir}/dataset_metadata.json", "w") as f:
+            json.dump(metadata, f, indent=4)
         
         return metadata

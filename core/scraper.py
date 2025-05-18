@@ -26,7 +26,7 @@ class SampleScraper:
             'page_size': page_size,
             'token': self.api_key
         }
-        resp = requests.get(url, params=params)
+        resp = requests.get(url, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
         return data.get('results', [])
@@ -41,7 +41,7 @@ class SampleScraper:
         preview_url = previews.get('preview-hq-mp3') or previews.get('preview-lq-mp3')
         if not preview_url:
             raise RuntimeError(f"No preview URL for sample {sample.get('id')}")
-        response = requests.get(preview_url, stream=True)
+        response = requests.get(preview_url, stream=True, timeout=30)
         response.raise_for_status()
         os.makedirs(dest_dir, exist_ok=True)
         filename = f"{sample.get('id')}.mp3"

@@ -5,6 +5,7 @@ import torch
 import numpy as np
 import argparse
 import os
+import json
 
 def generate_samples_with_models(output_dir="output", count=5):
     """
@@ -86,10 +87,11 @@ if __name__ == "__main__":
     elif args.command == 'train':
         # Load processed dataset paths from metadata
         try:
-            import numpy as np
-            metadata = np.load('data/processed/dataset_metadata.npy', allow_pickle=True).item()
+            with open('data/processed/dataset_metadata.json', 'r') as f:
+                metadata = json.load(f)
             train_transformer_model(metadata['segment_paths'], args.epochs)
-        except (FileNotFoundError, KeyError):
+        except (FileNotFoundError, KeyError) as e:
+            print(f"Error loading dataset metadata: {e}")
             print("No processed dataset found. Run 'python app.py process' first.")
     else:
         parser.print_help()
