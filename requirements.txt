@@ -1,8 +1,11 @@
 # Python dependencies for AI Sample Chopper
 
+# Build dependencies 
+setuptools>=65.5.0
+
 # Audio processing
 librosa==0.10.1
-numpy==1.24.3
+numpy>=1.26.0  # Updated for Python 3.12 compatibility
 soundfile==0.12.1
 pydub==0.25.1
 
