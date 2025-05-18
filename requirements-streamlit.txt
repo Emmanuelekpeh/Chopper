@@ -1,0 +1,20 @@
+# Streamlit Cloud requirements - minimized to avoid greenlet issues
+
+# Core dependencies
+streamlit>=1.22.0
+numpy>=1.26.0
+matplotlib==3.7.1
+librosa==0.10.1
+soundfile==0.12.1
+
+# Deep learning - minimized
+torch>=2.0.0
+
+# Utilities
+python-dotenv==1.0.0
+tqdm==4.65.0
+
+# Avoid problematic dependencies
+# greenlet is excluded
+# SQLAlchemy is pinned to a version that might not require greenlet
+SQLAlchemy==2.0.25; python_version >= "3.12" 
