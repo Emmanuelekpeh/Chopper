@@ -20,8 +20,6 @@ from core.transformer_generator import TransformerSampleGenerator
 from core.improved_generator import ImprovedSampleGenerator
 from core.processing_pipeline import ProcessingPipeline
 from core.chopping_engine import ChoppingEngine
-from core.splice_scraper import SpliceLoopScraper
-from core.playwright_scraper import PlaywrightScraper
 
 # Import the new tab UI functions
 from tabs.generate_audio_ui import render_generate_audio_tab

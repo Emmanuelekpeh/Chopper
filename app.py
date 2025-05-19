@@ -8,9 +8,8 @@ import traceback
 from core.audio_loader import AudioLoader
 from core.chopping_engine import ChoppingEngine
 from core.improved_generator import ImprovedSampleGenerator
-from core.splice_scraper import SpliceLoopScraper
-from core.playwright_scraper import PlaywrightScraper
 from core.processing_pipeline import ProcessingPipeline
+from core.simple_scraper import search_looperman, download_audio_files
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -34,24 +33,15 @@ def setup_directories():
 def download_samples(source="looperman", query="drum loop", count=50):
     """Download samples from the specified source"""
     print(f"Downloading {count} samples matching '{query}' from {source}...")
-    
     try:
-        if source.lower() == "splice":
-            scraper = SpliceLoopScraper(download_dir="data/raw")
-            samples = scraper.bulk_download(query, count)
-            print(f"Downloaded {len(samples)} samples from Splice")
-            return [item["local_path"] for item in samples]
-            
-        elif source.lower() == "looperman":
-            scraper = PlaywrightScraper(download_dir="data/raw")
-            samples = scraper.bulk_download(query, pages=count // 15 + 1)
-            print(f"Downloaded {len(samples)} samples from Looperman")
-            return samples
-            
+        if source.lower() == "looperman":
+            results = search_looperman(query, pages=(count // 15) + 1)
+            files = download_audio_files(results, output_dir="data/raw", max_count=count)
+            print(f"Downloaded {len(files)} samples from Looperman")
+            return files
         else:
-            print(f"Unknown source: {source}")
+            print(f"Unknown or unsupported source: {source}")
             return []
-            
     except Exception as e:
         print(f"Error downloading samples: {e}")
         traceback.print_exc()
@@ -142,7 +132,7 @@ def main():
     # Download command
     download_parser = subparsers.add_parser('download', help='Download samples')
     download_parser.add_argument('--source', '-s', default='looperman',
-                              choices=['looperman', 'splice'],
+                              choices=['looperman'],
                               help='Source for samples')
     download_parser.add_argument('--query', '-q', default='drum loop',
                               help='Search query')
